@@ -5,7 +5,7 @@
 
 #pragma once
 
-
+class CMyBtn;
 // CChildView 창
 
 class CChildView : public CWnd
@@ -16,6 +16,8 @@ public:
 
 // 특성입니다.
 public:
+	//CButton* m_pBtn;
+	CMyBtn* m_pBtn;
 
 // 작업입니다.
 public:
@@ -31,6 +33,13 @@ public:
 	// 생성된 메시지 맵 함수
 protected:
 	afx_msg void OnPaint();
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 	DECLARE_MESSAGE_MAP()
+public:
+	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+
+	afx_msg void OnClick();
 };
 
