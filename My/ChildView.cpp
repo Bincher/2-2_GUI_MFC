@@ -6,7 +6,7 @@
 #include "framework.h"
 #include "My.h"
 #include "ChildView.h"
-#include "myBtn.h" // new에서 필요
+#include "CMyBtn.h" // new에서 필요
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -39,6 +39,7 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	//ON_COMMAND(999, OnClick)
 	ON_BN_CLICKED(999, OnClick)
 	//ON_EN_CHANGED CEdit
+	ON_MESSAGE(WM_MYMESSAGE, OnMyMessage)
 END_MESSAGE_MAP()
 
 
@@ -119,5 +120,32 @@ int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void CChildView::OnClick()
 {
-	MessageBox(L"Clicked on the button", L"MSG", MB_OK);
+	//MessageBox(L"Clicked on the button", L"MSG", MB_OK);
+	this->SendMessage(WM_MYMESSAGE, 0, 0);
 }
+
+LRESULT CChildView::OnMyMessage(WPARAM wParam, LPARAM lParam)
+{
+	MessageBox(L"WM_MYMESSAGE", L"MSG", MB_OK);
+	return 0;
+}
+
+// 메시지맵을 이용한 메시지(이벤트) 처리
+
+// 1. ON_WM_CREATE(), OnCreate()
+
+// 2. ON_COMMAND(id, OnClick) void OnClick()
+
+// 3. ON_BN_CLICKED(id, OnClick)
+
+// 4. 상속을 하여 처리
+// class CMyBtn: public CButton {}
+// 새항목추가, ~.h, ~.cpp, 위저드를 이용해서 클래스를 추가하면, 이벤트처리도 위저드를 통해서 쉽게 할 수 있다.
+
+// 5. ON_MESSAGE(WM_MYMSG, OnMyMsg)
+//    LRESULT OnMyMsg(WPARAM, LPARAM)
+
+// 6. Win32 처럼 처리
+// LRESULT windowProc(UINT msg, WAPARAM, LPARAM) {return CWnd::DefaultwindowProc(msg, wParam, lParam);}
+
+// keywords : CWnd MSDN

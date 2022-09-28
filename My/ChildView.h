@@ -5,6 +5,8 @@
 
 #pragma once
 
+#define WM_MYMESSAGE WM_USER+1
+
 class CMyBtn;
 // CChildView 창
 
@@ -41,5 +43,6 @@ public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 
 	afx_msg void OnClick();
+	afx_msg LRESULT OnMyMessage(WPARAM, LPARAM);
 };
 
