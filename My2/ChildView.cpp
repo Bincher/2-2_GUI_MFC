@@ -6,6 +6,7 @@
 #include "framework.h"
 #include "My2.h"
 #include "ChildView.h"
+#include "MainFrm.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,7 +27,9 @@ CChildView::~CChildView()
 BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_PAINT()
 	ON_WM_MOUSEMOVE()
-	ON_WM_CREATE()
+	//ON_WM_CREATE()
+	ON_COMMAND(ID_TEST_MIN, &CChildView::OnTestMin)
+	ON_COMMAND(ID_TEST_MAX, &CChildView::OnTestMax)
 END_MESSAGE_MAP()
 
 
@@ -40,13 +43,13 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs) // OnCreate() 전에 자동�
 
 	cs.dwExStyle |= WS_EX_CLIENTEDGE;
 	cs.style &= ~WS_BORDER;
-	
+	/*
 	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS, 
 		::LoadCursor(nullptr, IDC_ARROW), reinterpret_cast<HBRUSH>(COLOR_WINDOW+1), nullptr);
-	/*
-	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS,
-		::LoadCursor(nullptr, IDC_ARROW), (HBRUSH)::GetStockObject(BLACK_BRUSH), nullptr);
 	*/
+	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS,
+		::LoadCursor(nullptr, IDC_ARROW), (HBRUSH)::GetStockObject(WHITE_BRUSH), nullptr);
+	
 	// AfxRegisterWndClass : 윈도우클래스 정의,등록 처리
 
 	return TRUE;
@@ -130,4 +133,69 @@ int CChildView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		0
 	);
 	return 0;
+}
+
+void CChildView::OnTestMin()
+{
+	this->MoveWindow(CRect(200, 200, 500, 500));
+}
+
+// My2.h에 extern CMy2App theApp; 를 없애면 동작 x
+// extern CMy2App theApp; 정상
+// CMy2App theApp; 중복선언
+
+void CChildView::OnTestMax()
+{
+	CRect rt;
+	// 프레임 윈도우에서 클라이언트 영역의 크기를 알아내서 다시 차일드 윈도우를 움직여준다
+	//GetClientRect(rt); //this->MoveWindow(rt) - ChildView 그러나 Mainfirm에서 받아야됨
+	//MoveWindow(rt); //this->MoveWindow(rt)
+	
+	// #include "mainfrm.h"
+	//CMainFrame* pFrame;
+	//pFrame = (CMainFrame*)this->GetParent();
+	// or
+
+	CMainFrame* pFrame = 0; // 일반적인 경우에 메인 프레임에 접근하는 방법이 필요
+	//                      CMyApp()에 접근하는 방법이 필요
+	
+	CMy2App* pApp = 0;
+	//pApp = &theApp;
+	pApp = (CMy2App*)AfxGetApp();
+	//pFrame = (CMainFrame*)pApp->m_pMainWnd;
+	pFrame = (CMainFrame*)AfxGetMainWnd();
+	pFrame->GetClientRect(rt);
+	//CFrameWnd*
+
+	/*
+	pFrame = (CMainFrame*)this->GetParent();
+	pFrame = (CMainFrame*)GetParent();
+	pFrame->GetClientRect(rt);
+	*/
+//	MoveWindow(rt); 툴바 없으면
+//  툴바 적용시
+	CMFCToolBar* pTool;
+	pTool = &pFrame->m_wndToolBar;
+	if (!pTool->IsFloating())
+	{
+		CRect rtTool;
+		pTool->GetWindowRect(rtTool);
+		rt.top = rt.top + rtTool.Height();
+	}
+
+	CMFCMenuBar* pMenu;
+	pMenu = &pFrame->m_wndMenuBar;
+	if (!pMenu->IsFloating())
+	{
+		CRect rtMenu;
+		pMenu->GetWindowRect(rtMenu);
+		rt.top = rt.top + rtMenu.Height();
+	}
+
+	this->MoveWindow(rt);
+	//InitInstance(), ExitInstance(), Run()
+
+	//AfxGetMainWnd()
+	//AfxGetApp()
+	//AfxGetInstancHandle()
 }
