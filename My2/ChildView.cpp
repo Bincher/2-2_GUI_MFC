@@ -12,7 +12,7 @@
 #define new DEBUG_NEW
 #endif
 
-
+CPoint m_point;
 // CChildView
 
 CChildView::CChildView()
@@ -30,6 +30,7 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	//ON_WM_CREATE()
 	ON_COMMAND(ID_TEST_MIN, &CChildView::OnTestMin)
 	ON_COMMAND(ID_TEST_MAX, &CChildView::OnTestMax)
+	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
 
@@ -58,9 +59,24 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs) // OnCreate() 전에 자동�
 void CChildView::OnPaint() 
 {
 	CPaintDC dc(this); // 그리기를 위한 디바이스 컨텍스트입니다.
-	
+	// CDC *pDC 와 같음 + 더 지능적인 처리 가능
+
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
-	
+	CRect rt;
+	rt.left = m_point.x - 50; // point는 OnLButtonDown()에서 넘어온 것임으로 멤버 변수로 대치
+	rt.top = m_point.y - 50;
+	rt.right = m_point.x + 50;
+	rt.bottom = m_point.y + 50;
+
+	CPen pen, * oldPen;
+	pen.CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
+	oldPen = dc.SelectObject(&pen);
+
+	dc.Rectangle(rt);
+
+	dc.SelectObject(oldPen);
+	pen.DeleteObject();
+
 	// 그리기 메시지에 대해서는 CWnd::OnPaint()를 호출하지 마십시오.
 }
 
@@ -198,4 +214,38 @@ void CChildView::OnTestMax()
 	//AfxGetMainWnd()
 	//AfxGetApp()
 	//AfxGetInstancHandle()
+}
+
+void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: 여기에 메시지 처리기 코드를 추가 및/또는 기본값을 호출합니다.
+	CDC* pDC;
+	pDC = GetDC(); // 사용 시작 -> 포인터 연결
+
+	CRect rt;
+	rt.left = point.x - 50;
+	rt.top = point.y - 50;
+	rt.right = point.x + 50;
+	rt.bottom = point.y + 50;
+
+	CPen pen, * oldPen;
+	pen.CreatePen(PS_SOLID, 2, RGB(0, 0, 255));
+	oldPen = pDC->SelectObject(&pen);
+
+	pDC->Rectangle(rt);
+
+	pDC->SelectObject(oldPen); // 중요
+	pen.DeleteObject();
+	
+	
+gui_프로그래밍 6주차-MFC(다른 클래스에 접근)
+	
+	ReleaseDC(pDC); // 사용 끝 -> 포인터 해제
+	m_point = point;
+	Invalidate(); // 특정 영역만 무효화 (UpdateWindow()는 생략 가능)
+	UpdateWindow(); // 화면을 무효화 시킨다 -> 적절한 시점에 WM_PAINT 메시지 발생 유발
+	CWnd::OnLButtonDown(nFlags, point);
+
+	// WM_PAINT는 출력 당시만 유효
+	// 계속 표시되어야 하면 OnPaint() 또는 OnDraw() 함수에 구현
 }
