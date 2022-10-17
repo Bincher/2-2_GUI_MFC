@@ -184,6 +184,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ChildView.h" />
+    <ClInclude Include="CMyDlg.h" />
     <ClInclude Include="CMyWnd.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
@@ -194,6 +195,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChildView.cpp" />
+    <ClCompile Include="CMyDlg.cpp" />
     <ClCompile Include="CMyWnd.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="My2.cpp" />

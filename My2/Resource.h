@@ -16,6 +16,10 @@
 #define IDR_MAINFRAME_256               129
 #define IDR_My2TYPE                     130
 #define IDS_EDIT_MENU                   306
+#define IDD_DIALOG1                     310
+#define IDC_EDIT1                       1000
+#define IDC_EDIT2                       1001
+#define IDC_BUTTON1                     1002
 #define ID_32771                        32771
 #define ID_32772                        32772
 #define ID_TEST_MIN                     32773
@@ -25,14 +29,16 @@
 #define ID_32777                        32777
 #define ID_MIN_DSDAD                    32778
 #define ID_FDFF_FSAFAF                  32779
+#define ID_32780                        32780
+#define ID_TEST_TEST                    32781
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        310
-#define _APS_NEXT_COMMAND_VALUE         32780
-#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_RESOURCE_VALUE        312
+#define _APS_NEXT_COMMAND_VALUE         32782
+#define _APS_NEXT_CONTROL_VALUE         1003
 #define _APS_NEXT_SYMED_VALUE           310
 #endif
 #endif

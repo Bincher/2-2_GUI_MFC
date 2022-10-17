@@ -7,6 +7,7 @@
 #include "My2.h"
 #include "ChildView.h"
 #include "MainFrm.h"
+#include "CMyDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -30,6 +31,7 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	//ON_WM_CREATE()
 	ON_COMMAND(ID_TEST_MIN, &CChildView::OnTestMin)
 	ON_COMMAND(ID_TEST_MAX, &CChildView::OnTestMax)
+	ON_COMMAND(ID_TEST_TEST, &CChildView::OnTestTest)
 	ON_WM_LBUTTONDOWN()
 END_MESSAGE_MAP()
 
@@ -246,4 +248,15 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 
 	// WM_PAINT는 출력 당시만 유효
 	// 계속 표시되어야 하면 OnPaint() 또는 OnDraw() 함수에 구현
+}
+
+void CChildView::OnTestTest()
+{
+	CMyDlg dlg(this); // 대화상자 객체 생성
+	if (dlg.DoModal() == IDOK)// CreateWindow역할 대신 DoModal -> 대화상자 화면에 나타내기
+	{
+		CClientDC dc(this); // GetDC, ReleaseDC 불필요. 클라이언트 영역 출력에 한정
+		dc.TextOutW(0, 0, dlg.m_strMsg);
+	}
+	// 닫힐땐 CDialog::onOK()
 }

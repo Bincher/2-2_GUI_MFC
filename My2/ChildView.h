@@ -38,8 +38,9 @@ protected:
 public:
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
-	afx_msg void OnTestMin();
+	afx_msg void OnTestMin(); 
 	afx_msg void OnTestMax();
+	afx_msg void OnTestTest();
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
