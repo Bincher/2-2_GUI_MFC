@@ -40,5 +40,6 @@ public:
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnTestMin();
 	afx_msg void OnTestMax();
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
 };
 
